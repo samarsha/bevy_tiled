@@ -118,11 +118,10 @@ impl Map {
                 let tile_width = tileset.tile_width as f32;
                 let tile_height = tileset.tile_height as f32;
 
-                let image = tileset.images.first();
-                if image.is_none() {
+                if !tileset.images.is_empty() {
                     continue;
                 }
-                let image = image.unwrap();
+                let image = tileset.images.first().unwrap();
 
                 let texture_width = image.width as f32;
                 let texture_height = image.height as f32;
@@ -448,7 +447,7 @@ pub fn process_loaded_tile_maps(
 
         for (_, _, _, mut materials_map, _) in query.iter_mut() {
             for tileset in &map.map.tilesets {
-                if !materials_map.contains_key(&tileset.first_gid) {
+                if !materials_map.contains_key(&tileset.first_gid) && !tileset.images.is_empty() {
                     let texture_path = map
                         .image_folder
                         .join(tileset.images.first().unwrap().source.as_str());
