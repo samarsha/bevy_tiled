@@ -113,7 +113,13 @@ impl Map {
             for tileset in map.tilesets.iter() {
                 let tile_width = tileset.tile_width as f32;
                 let tile_height = tileset.tile_height as f32;
-                let image = tileset.images.first().unwrap();
+
+                let image = tileset.images.first();
+                if image.is_none() {
+                    continue;
+                }
+                let image = image.unwrap();
+
                 let texture_width = image.width as f32;
                 let texture_height = image.height as f32;
                 let columns = (texture_width / tile_width).floor();
