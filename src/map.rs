@@ -92,8 +92,12 @@ impl Map {
         }
     }
 
-    pub fn try_from_bytes(asset_path: &Path, bytes: Vec<u8>) -> Result<Map> {
-        let map = tiled::parse_with_path(BufReader::new(bytes.as_slice()), asset_path).unwrap();
+    pub fn try_from_bytes(asset_folder: &Path, asset_path: &Path, bytes: Vec<u8>) -> Result<Map> {
+        let map = tiled::parse_with_path(
+            BufReader::new(bytes.as_slice()),
+            asset_folder.join(asset_path).as_path(),
+        )
+        .unwrap();
 
         let mut layers = Vec::new();
 
