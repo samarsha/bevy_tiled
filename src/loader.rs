@@ -4,9 +4,12 @@ use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
     utils::BoxedFuture,
 };
+use std::path::Path;
 
 #[derive(Default)]
-pub struct TiledMapLoader;
+pub struct TiledMapLoader {
+    pub(crate) asset_folder: String,
+}
 
 impl TiledMapLoader {
     pub fn remove_tile_flags(tile: u32) -> u32 {
@@ -28,8 +31,8 @@ impl AssetLoader for TiledMapLoader {
         load_context: &'a mut LoadContext,
     ) -> BoxedFuture<'a, Result<(), anyhow::Error>> {
         Box::pin(async move {
-            let path = load_context.path();
-            let map = Map::try_from_bytes(path, bytes.into())?;
+            let path = Path::new(&self.asset_folder).join(load_context.path());
+            let map = Map::try_from_bytes(path.as_path(), bytes.into())?;
             load_context.set_default_asset(LoadedAsset::new(map));
             Ok(())
         })

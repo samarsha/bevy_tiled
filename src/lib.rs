@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::render_graph::RenderGraph};
+use bevy::{asset::AssetServerSettings, prelude::*, render::render_graph::RenderGraph};
 
 mod loader;
 mod map;
@@ -14,8 +14,14 @@ pub struct TiledMapPlugin;
 
 impl Plugin for TiledMapPlugin {
     fn build(&self, app: &mut AppBuilder) {
+        let asset_folder = app
+            .resources_mut()
+            .get_or_insert_with(AssetServerSettings::default)
+            .asset_folder
+            .clone();
+
         app.add_asset::<map::Map>()
-            .init_asset_loader::<loader::TiledMapLoader>()
+            .add_asset_loader(loader::TiledMapLoader { asset_folder })
             .add_system(process_loaded_tile_maps.system());
 
         let resources = app.resources();
