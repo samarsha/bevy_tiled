@@ -118,7 +118,7 @@ impl Map {
                 let tile_width = tileset.tile_width as f32;
                 let tile_height = tileset.tile_height as f32;
 
-                if !tileset.images.is_empty() {
+                if tileset.images.is_empty() {
                     continue;
                 }
                 let image = tileset.images.first().unwrap();
